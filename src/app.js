@@ -6,7 +6,12 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/api/users', require('./routes/userRoutes'));
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
+const viewRoutes = require('./routes/viewRoutes');
+app.use('/', viewRoutes);
+
 
 // Export app
 module.exports = app;

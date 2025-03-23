@@ -21,11 +21,15 @@
   },
   "homepage": "https://github.com/Aidanator17/KingdomStats#readme",
   "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "bcrypt": "^5.1.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
-    "passport": "^0.7.0"
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
   }
 }
