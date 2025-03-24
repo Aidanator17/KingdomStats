@@ -1,16 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title %></title>
+  <title>
+    <%= title %>
+  </title>
   <link rel="stylesheet" href="/styles/main.css" />
+
+  <% if (pageStyles) { %>
+    <link rel="stylesheet" href="<%= pageStyles %>" />
+    <% } %>
+    
 </head>
+
 <body>
   <%- include('./partials/navbar') %>
 
-  <main>
-    <%- body %>
-  </main>
+    <main>
+      <%- body %>
+    </main>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        if (sidebar.style.width === "250px") {
+          sidebar.style.width = "0";
+        } else {
+          sidebar.style.width = "250px";
+        }
+      }
+
+      // Optional: close sidebar if user taps outside
+      window.addEventListener("click", function (e) {
+        const sidebar = document.getElementById("sidebar");
+        if (
+          sidebar.style.width === "250px" &&
+          !sidebar.contains(e.target) &&
+          !e.target.closest(".hamburger")
+        ) {
+          sidebar.style.width = "0";
+        }
+      });
+      function toggleDropdown() {
+        const dropdown = document.getElementById("userDropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+
+      // Optional: hide dropdown when clicking outside
+      window.addEventListener('click', function (e) {
+        const dropdown = document.getElementById("userDropdown");
+        const avatar = document.querySelector(".user-avatar");
+        if (!avatar.contains(e.target)) {
+          dropdown.style.display = "none";
+        }
+      });
+    </script>
+
 </body>
+
 </html>

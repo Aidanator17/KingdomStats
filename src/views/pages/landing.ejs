@@ -1,2 +1,77 @@
-<h1>Welcome to KingdomStats</h1>
-<p>This is your Valorant data dashboard.</p>
+<div class="landing-page">
+    <h1 class="main-title">Kingdom Stats</h1>
+  
+    <div class="lookup-card">
+      <h2 class="lookup-title">User Lookup</h2>
+      <form action="/lookup" method="GET" class="lookup-form" autocomplete="off">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            name="username" 
+            id="usernameInput"
+            placeholder="Enter Riot ID (e.g. Aidanator#NA1)" 
+            required 
+          />
+      
+          <% if (favourites && favourites.length > 0) { %>
+            <ul id="suggestions" class="suggestions-list hidden">
+              <% favourites.forEach(fav => { %>
+                <li onclick="selectSuggestion('<%= fav.puuid %>')">
+                  <span class="nickname"><%= fav.nickname %></span>
+                  <span class="divider">|</span>
+                  <span class="puuid"><%= fav.puuid %></span>
+                </li>
+              <% }); %>
+            </ul>
+          <% } %>
+          
+        </div>
+      
+        <button type="submit">Search</button>
+      </form>
+      
+      
+    </div>
+  </div>
+  <script>
+    const input = document.getElementById('usernameInput');
+    const suggestionBox = document.getElementById('suggestions');
+    const allSuggestions = Array.from(suggestionBox?.children || []);
+  
+    input.addEventListener('focus', () => {
+      allSuggestions.forEach(item => item.style.display = 'flex');
+      suggestionBox.classList.remove('hidden');
+    });
+  
+    input.addEventListener('input', () => {
+      const query = input.value.toLowerCase();
+      let visibleCount = 0;
+  
+      allSuggestions.forEach((item) => {
+        const nickname = item.querySelector('.nickname')?.textContent.toLowerCase() || '';
+        const match = nickname.includes(query);
+        item.style.display = match ? 'flex' : 'none';
+        if (match) visibleCount++;
+      });
+  
+      if (visibleCount > 0) {
+        suggestionBox.classList.remove('hidden');
+      } else {
+        suggestionBox.classList.add('hidden');
+      }
+    });
+  
+    function selectSuggestion(value) {
+      input.value = value;
+      suggestionBox.classList.add('hidden');
+    }
+  
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.lookup-form')) {
+        suggestionBox.classList.add('hidden');
+      }
+    });
+  </script>
+  
+  
+  

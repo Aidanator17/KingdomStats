@@ -1,0 +1,47 @@
+<div class="glass-auth-page">
+    <div class="glass-card">
+      <h1 class="glass-title">Create Your Account</h1>
+      <form action="/auth/register" method="POST" class="glass-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+  
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+  
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+  
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required />
+        <div id="password-error" class="glass-error hidden">
+          Passwords do not match.
+        </div>
+        
+        <button type="submit" class="glass-button">Sign Up</button>
+      </form>
+  
+      <div class="glass-footer">
+        <span>Already have an account?</span>
+        <a href="/login">Login</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    const form = document.querySelector('.glass-form');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorDiv = document.getElementById('password-error');
+  
+    form.addEventListener('submit', function (e) {
+      if (password.value !== confirmPassword.value) {
+        e.preventDefault(); // prevent form from submitting
+        errorDiv.classList.remove('hidden');
+        errorDiv.style.animation = 'none'; // restart animation
+        errorDiv.offsetHeight; // force reflow
+        errorDiv.style.animation = 'bounceIn 0.3s ease'; // re-apply animation
+      } else {
+        errorDiv.classList.add('hidden'); // hide error if match
+      }
+    });
+  </script>
+  

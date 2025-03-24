@@ -25,9 +25,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 // Set up user object globally
 app.use((req, res, next) => {
-    res.locals.user = req.user;
-    next();
-  });
+  res.locals.user = req.user || null;
+  res.locals.favourites = req.user?.favourites || [];
+  next();
+});
+
   
 
 // Set view engine
