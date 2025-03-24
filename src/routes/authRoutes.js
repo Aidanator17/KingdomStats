@@ -4,6 +4,8 @@ const passport = require('passport');
 const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const { redirectIfAuthenticated, ensureAuthenticated } = require('../middlewares/auth');
+const crypto = require('crypto');
+const { sendVerificationEmail } = require('../utils/mailer');
 
 const prisma = new PrismaClient();
 
@@ -22,16 +24,19 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
 
     await prisma.users.create({
       data: {
         email,
         password_hash: hashedPassword,
         username,
+        verification_token: verificationToken
       },
     });
+    await sendVerificationEmail(email, verificationToken);
 
-    res.redirect('/login');
+    res.redirect('/auth/verify-email');
   } catch (err) {
     console.error(err);
     res.render('pages/register', { error: 'Something went wrong during registration.' });
@@ -58,7 +63,13 @@ router.post('/login', (req, res, next) => {
     });
 
     if (err) return next(err);
-    if (!user) return res.render('pages/login', { error: 'Invalid email or password.' });
+    if (!user) {
+      return res.render('pages/login', {
+        title: 'Login',
+        pageStyles: '/styles/auth.css',
+        error: info?.message || 'Invalid email or password',
+      });
+    }
 
     req.logIn(user, async err => {
       if (err) return next(err);
@@ -80,5 +91,45 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
   });
 });
+
+// GET /auth/verify/:token
+router.get('/verify/:token', async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await prisma.users.findFirst({
+      where: { verification_token: token }
+    });
+
+    if (!user) {
+      return res.status(404).render('pages/verify-email', {
+        error: 'Invalid or expired verification token.',
+        title: 'Verify Your Email',
+      });
+    }
+
+    await prisma.users.update({
+      where: { user_id: user.user_id },
+      data: {
+        verified: true,
+        verification_token: null // clear token
+      }
+    });
+
+    res.render('pages/verify-email', {
+      message: 'Email verified! You can now log in.',
+      title: 'Verify Your Email',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('pages/verify-email', {
+      error: 'Verification failed.',
+      title: 'Verify Your Email',
+    });
+  }
+});
+
+
+
 
 module.exports = router;

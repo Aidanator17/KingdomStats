@@ -5,7 +5,7 @@ const { redirectIfAuthenticated, ensureAuthenticated } = require('../middlewares
 
 // Render the home page
 router.get('/', (req, res) => {
-  const favourites = (req.user && req.user.favourites) ? req.user.favourites : [{nickname:"Aidanator#JAX",puuid:"27f3cba4-d42c-563d-9b12-92dc4ac54127"}];
+  const favourites = (req.user && req.user.favourites) ? req.user.favourites : [{ nickname: "Aidanator#JAX", puuid: "27f3cba4-d42c-563d-9b12-92dc4ac54127" }]; // replace with empty array in live app
 
   res.render('pages/landing', {
     title: 'KingdomStats - Home',
@@ -30,6 +30,16 @@ router.get('/register', redirectIfAuthenticated, (req, res) => {
     pageStyles: '/styles/auth.css'
   });
 });
+
+
+router.get('/verify-email', (req, res) => {
+  res.render('pages/verify-email', {
+    title: 'Verify Your Email',
+    pageStyles: '/styles/auth.css' // or wherever your auth card styles live
+  });
+});
+
+
 
 // Render a user's public profile page
 router.get('/user/:username', (req, res) => {

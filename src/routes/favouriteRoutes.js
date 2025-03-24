@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const { redirectIfAuthenticated, ensureAuthenticated } = require('../middlewares/auth');
 
 // POST /favourites - add a new favourite
-router.post('/favourites', ensureAuthenticated, async (req, res) => {
+router.post('/', ensureAuthenticated, async (req, res) => {
   const user_id = req.user.user_id;
   const { target_puuid, note, username, tag, visibility } = req.body;
   const nickname = `${username}#${tag}`;

@@ -149,3 +149,37 @@
 .glass-footer a:hover {
   text-decoration: underline;
 }
+.verify-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px);
+  padding: 20px;
+}
+
+.verify-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  animation: fadeSlideIn 0.8s ease-out;
+}
+
+.verify-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.verify-message {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ccc;
+}

@@ -11,8 +11,14 @@
       <div class="glass-links">
         <a href="/forgot-password">Forgot Password?</a>
       </div>
+      <% if (typeof error !=='undefined' && error) { %>
+        <div class="glass-error">
+          <%= error %>
+        </div>
+        <% } %>
 
-      <button type="submit" class="glass-button">Login</button>
+
+          <button type="submit" class="glass-button">Login</button>
     </form>
 
     <div class="glass-footer">
