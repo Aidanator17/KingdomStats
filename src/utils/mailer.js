@@ -4,7 +4,7 @@ require('dotenv').config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendVerificationEmail(email, token) {
-  const verifyUrl = `http://localhost:3000/auth/verify/${token}`;
+  const verifyUrl = `https://www.kingdomstats.com/auth/verify/${token}`;
 
   try {
     await resend.emails.send({

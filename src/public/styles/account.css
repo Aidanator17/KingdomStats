@@ -1,0 +1,140 @@
+.account-page {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .account-title {
+    text-align: center;
+    color: white;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .glass-card {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+  
+  .glass-card h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .glass-card p, label {
+    margin: 8px 0;
+  }
+  
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #111;
+    color: white;
+    margin-bottom: 12px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  button:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .coming-soon {
+    margin-top: 10px;
+    font-style: italic;
+    color: #aaa;
+  }
+  
+  .riot-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  
+  .riot-card img {
+    height: 48px;
+    border-radius: 8px;
+  }
+  
+  .player-card {
+    height: 80px;
+  }
+  
+  .favourites-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+  
+  .favourites-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .favourites-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 768px) {
+    .account-title {
+      font-size: 28px;
+    }
+  
+    .glass-card {
+      padding: 20px;
+    }
+  
+    input[type="text"], input[type="password"] {
+      font-size: 16px;
+    }
+  
+    button {
+      width: 100%;
+    }
+  
+    .favourites-form {
+      flex-direction: column;
+    }
+  
+    .riot-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .player-card {
+      width: 100%;
+      height: auto;
+    }
+  }
+    

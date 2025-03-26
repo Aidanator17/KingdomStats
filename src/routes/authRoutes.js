@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
     });
     await sendVerificationEmail(email, verificationToken);
 
-    res.redirect('/auth/verify-email');
+    res.redirect('/verify-email');
   } catch (err) {
     console.error(err);
     res.render('pages/register', { error: 'Something went wrong during registration.' });
@@ -105,6 +105,7 @@ router.get('/verify/:token', async (req, res) => {
       return res.status(404).render('pages/verify-email', {
         error: 'Invalid or expired verification token.',
         title: 'Verify Your Email',
+        pageStyles: '/styles/auth.css'
       });
     }
 
@@ -119,12 +120,14 @@ router.get('/verify/:token', async (req, res) => {
     res.render('pages/verify-email', {
       message: 'Email verified! You can now log in.',
       title: 'Verify Your Email',
+      pageStyles: '/styles/auth.css'
     });
   } catch (err) {
     console.error(err);
     res.status(500).render('pages/verify-email', {
       error: 'Verification failed.',
       title: 'Verify Your Email',
+      pageStyles: '/styles/auth.css'
     });
   }
 });

@@ -16,10 +16,10 @@
           <% if (favourites && favourites.length > 0) { %>
             <ul id="suggestions" class="suggestions-list hidden">
               <% favourites.forEach(fav => { %>
-                <li onclick="selectSuggestion('<%= fav.puuid %>')">
+                <li onclick="selectSuggestion('<%= fav.target_puuid %>')">
                   <span class="nickname"><%= fav.nickname %></span>
                   <span class="divider">|</span>
-                  <span class="puuid"><%= fav.puuid %></span>
+                  <span class="puuid"><%= fav.target_puuid %></span>
                 </li>
               <% }); %>
             </ul>

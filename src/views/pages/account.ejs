@@ -1,0 +1,75 @@
+<div class="account-page">
+    <h1 class="account-title">Your Account</h1>
+  
+    <!-- Account Info -->
+    <div class="glass-card">
+      <h2>Account Info</h2>
+      <p><strong>Email:</strong> <%= user.email %></p>
+      <% if (user.username) { %>
+        <p><strong>Username:</strong> <%= user.username %></p>
+      <% } %>
+      <button disabled class="disabled-button">Save Changes</button>
+    </div>
+  
+    <!-- Security -->
+    <div class="glass-card">
+      <h2>Security</h2>
+      <form action="/account/password" method="POST" class="password-form">
+        <label for="currentPassword">Current Password</label>
+        <input type="password" id="currentPassword" name="currentPassword" required />
+  
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name="newPassword" required />
+  
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required />
+  
+        <button type="submit">Update Password</button>
+      </form>
+      <p class="coming-soon">🔐 2FA coming soon!</p>
+    </div>
+  
+    <!-- Linked Riot Account -->
+    <div class="glass-card">
+      <h2>Linked Riot Account</h2>
+      <% if (user.riotAccount) { %>
+        <p><strong>Riot ID:</strong> <%= riotAccount.riotTag %></p>
+        <div class="riot-card">
+          <img src="<%= riotAccount.rankIcon %>" alt="Rank Icon" />
+          <p><%= riotAccount.rankText %></p>
+          <img src="<%= riotAccount.playerCard %>" alt="Player Card" class="player-card" />
+        </div>
+        <form action="/account/unlink" method="POST">
+          <button type="submit">Unlink Account</button>
+        </form>
+      <% } else { %>
+        <form action="/account/link" method="GET">
+          <button type="submit">Link Riot Account</button>
+        </form>
+      <% } %>
+    </div>
+  
+    <!-- Favourites -->
+    <div class="glass-card">
+      <h2>Favourites</h2>
+      <% if (user.user_favourites.length > 0) { %>
+        <ul class="favourites-list">
+          <% user.user_favourites.forEach(fav => { %>
+            <li>
+              <span><%= fav.nickname %></span>
+              <form action="/account/favourites/delete" method="POST">
+                <input type="hidden" name="puuid" value="<%= fav.target_puuid %>" />
+                <button type="submit">Delete</button>
+              </form>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No favourites yet.</p>
+      <% } %>
+      <form action="/account/favourites/add" method="POST" class="favourites-form">
+        <input type="text" name="riotId" placeholder="Enter Riot ID (e.g. TenZ#NA1)" required />
+        <button type="submit">Add New Favourite</button>
+      </form>
+    </div>
+  </div>

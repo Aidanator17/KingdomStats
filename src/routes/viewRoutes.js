@@ -2,11 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const { redirectIfAuthenticated, ensureAuthenticated } = require('../middlewares/auth');
+const { sendVerificationEmail } = require('../utils/mailer');
 
 // Render the home page
-router.get('/', (req, res) => {
-  const favourites = (req.user && req.user.favourites) ? req.user.favourites : [{ nickname: "Aidanator#JAX", puuid: "27f3cba4-d42c-563d-9b12-92dc4ac54127" }]; // replace with empty array in live app
-
+router.get('/', async (req, res) => {
+  const favourites = (req.user && req.user.user_favourites) ? req.user.user_favourites : [{ nickname: "Aidanator#JAX", target_puuid: "27f3cba4-d42c-563d-9b12-92dc4ac54127" }]; // replace with empty array in live app
   res.render('pages/landing', {
     title: 'KingdomStats - Home',
     pageStyles: false,
@@ -39,7 +39,13 @@ router.get('/verify-email', (req, res) => {
   });
 });
 
-
+router.get('/account', ensureAuthenticated, (req, res) => {
+  res.render('pages/account', {
+    title: req.user.username,
+    pageStyles: '/styles/account.css',
+    user: req.user
+  });
+});
 
 // Render a user's public profile page
 router.get('/user/:username', (req, res) => {

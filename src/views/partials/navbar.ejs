@@ -23,7 +23,7 @@
           <img src="/images/default-avatar.png" alt="User Avatar" />
         </div>
         <div class="dropdown" id="userDropdown">
-          <a href="/profile">Profile</a>
+          <a href="/account">Account</a>
           <form action="/auth/logout" method="POST" class="logout-form">
             <button type="submit">Logout</button>
           </form>
@@ -46,7 +46,7 @@
   <a href="/agents">Agent Stats</a>
   <a href="/maps">Map Stats</a>
   <% if (user) { %>
-    <a href="/profile">Profile</a>
+    <a href="/account">Account</a>
     <form action="/auth/logout" method="POST" class="logout-form">
       <button type="submit">Logout</button>
     </form>
