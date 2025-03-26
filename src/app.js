@@ -44,6 +44,8 @@ app.set('layout', 'layout'); // this assumes views/layout.ejs
 
 // Static files (CSS)
 app.use(express.static(path.join(__dirname, 'public')));
+// Serve riot.txt directly from root path
+app.use('/riot.txt', express.static(path.join(__dirname, 'public/text/riot.txt')));
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
