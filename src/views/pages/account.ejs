@@ -14,7 +14,7 @@
     <!-- Security -->
     <div class="glass-card">
       <h2>Security</h2>
-      <form action="/account/password" method="POST" class="password-form">
+      <form action="/auth/password" method="POST">
         <label for="currentPassword">Current Password</label>
         <input type="password" id="currentPassword" name="currentPassword" required />
   
@@ -24,7 +24,15 @@
         <label for="confirmPassword">Confirm New Password</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required />
   
+        <% if (typeof passwordError !== 'undefined') { %>
+          <p class="error"><%= passwordError %></p>
+        <% } %>
+        
+        <% if (typeof passwordSuccess !== 'undefined') { %>
+          <p class="success"><%= passwordSuccess %></p>
+        <% } %>
         <button type="submit">Update Password</button>
+        
       </form>
       <p class="coming-soon">🔐 2FA coming soon!</p>
     </div>
