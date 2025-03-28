@@ -2,7 +2,6 @@
     <!-- Mobile-only Top Nav -->
     <div class="admin-mobile-nav">
         <a href="#user-lookup">User Lookup</a>
-        <a href="#roles">Roles</a>
         <a href="#logs">Logs</a>
     </div>
 
@@ -11,12 +10,11 @@
         <h3>Admin Panel</h3>
         <ul class="admin-nav">
             <li><a href="#user-lookup">User Lookup</a></li>
-            <li><a href="#roles">Role Management</a></li>
             <li><a href="#logs">Logs</a></li>
         </ul>
     </div>
 
-    <!-- Page Content -->
+    <!-- User Lookup -->
     <section class="glass-card" id="user-lookup">
         <h2>User Lookup</h2>
         <form id="userSearchForm" class="admin-search-form">
@@ -26,17 +24,12 @@
         <div id="searchResults" class="admin-results"></div>
     </section>
 
-    <section class="glass-card" id="roles">
-        <h2>Role Management</h2>
-        <p>Coming soon...</p>
-    </section>
-
+    <!-- Logs -->
     <section class="glass-card" id="logs">
         <h2>Logs</h2>
         <p>Coming soon...</p>
     </section>
 </div>
-
 
 <script>
     const form = document.getElementById('userSearchForm');
@@ -54,14 +47,76 @@
             return;
         }
 
-        resultsDiv.innerHTML = data.users.map(user => `
-        <div class="user-result">
-          <p><strong>Email:</strong> ${user.email}</p>
-          <p><strong>Signup:</strong> ${new Date(user.created_at).toLocaleString()}</p>
-          <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
-          <p><strong>Roles:</strong> ${user.user_role_assignments.map(r => r.user_roles.role_name).join(', ')}</p>
-          <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
-        </div>
-      `).join('');
+        resultsDiv.innerHTML = data.users.map(user => {
+            const role = user.user_role_assignments[0].user_roles.role_name;
+            return `
+          <div class="user-result">
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Signup:</strong> ${new Date(user.created_at).toLocaleString()}</p>
+            <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
+  
+            <div class="custom-role-select">
+              <label for="role-select-${user.id}"><strong>Role:</strong></label>
+              <select id="role-select-${user.id}" class="glass-select" data-current-role="${role}">
+                <option value="basic" ${role === 'basic' ? 'selected' : ''}>Basic</option>
+                <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+              </select>
+            </div>
+  <button id="save-role-${user.id}" class="save-role-btn" onclick="saveRole('${user.id}')" style="display: none;">Save Role</button>
+
+  
+            <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
+  
+          </div>
+        `;
+        }).join('');
+        // Set up all role dropdowns
+        data.users.forEach(user => {
+            const roleSelect = document.getElementById(`role-select-${user.id}`);
+            const saveBtn = document.getElementById(`save-role-${user.id}`);
+            const currentRole = roleSelect.getAttribute('data-current-role');
+
+            roleSelect.addEventListener('change', () => {
+                if (roleSelect.value !== currentRole) {
+                    saveBtn.style.display = 'inline-block';
+                } else {
+                    saveBtn.style.display = 'none';
+                }
+            });
+        });
+
     });
+
+    function setupRoleDropdown(userId, currentRole) {
+        const selectEl = document.getElementById(`role-select-${userId}`);
+        const saveBtn = document.getElementById(`save-role-${userId}`);
+
+        selectEl.addEventListener('change', () => {
+            if (selectEl.value !== currentRole) {
+                saveBtn.style.display = 'inline-block';
+            } else {
+                saveBtn.style.display = 'none';
+            }
+        });
+    }
+
+    function saveRole(userId) {
+        const selectEl = document.getElementById(`role-select-${userId}`);
+        const selectedRole = selectEl.value;
+
+        fetch(`/admin/users/${userId}/role`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role: selectedRole })
+        })
+            .then(res => res.json())
+            .then(() => {
+                alert(`Role updated to ${selectedRole}`);
+                document.getElementById(`save-role-${userId}`).style.display = 'none';
+            })
+            .catch(err => {
+                console.error('Failed to update role', err);
+                alert('Error updating role.');
+            });
+    }
 </script>
