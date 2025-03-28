@@ -60,5 +60,9 @@ app.use('/auth', authRoutes);
 const favouriteRoutes = require('./routes/favouriteRoutes');
 app.use('/api/favourites', favouriteRoutes);
 
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/admin', adminRoutes);
+
+
 // Export app
 module.exports = app;

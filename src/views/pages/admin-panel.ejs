@@ -1,0 +1,67 @@
+<div class="admin-main">
+    <!-- Mobile-only Top Nav -->
+    <div class="admin-mobile-nav">
+        <a href="#user-lookup">User Lookup</a>
+        <a href="#roles">Roles</a>
+        <a href="#logs">Logs</a>
+    </div>
+
+    <!-- Floating Right Panel -->
+    <div class="admin-float-panel">
+        <h3>Admin Panel</h3>
+        <ul class="admin-nav">
+            <li><a href="#user-lookup">User Lookup</a></li>
+            <li><a href="#roles">Role Management</a></li>
+            <li><a href="#logs">Logs</a></li>
+        </ul>
+    </div>
+
+    <!-- Page Content -->
+    <section class="glass-card" id="user-lookup">
+        <h2>User Lookup</h2>
+        <form id="userSearchForm" class="admin-search-form">
+            <input type="text" name="search" id="userSearchInput" placeholder="Search by ID or Email" required />
+            <button type="submit">Search</button>
+        </form>
+        <div id="searchResults" class="admin-results"></div>
+    </section>
+
+    <section class="glass-card" id="roles">
+        <h2>Role Management</h2>
+        <p>Coming soon...</p>
+    </section>
+
+    <section class="glass-card" id="logs">
+        <h2>Logs</h2>
+        <p>Coming soon...</p>
+    </section>
+</div>
+
+
+<script>
+    const form = document.getElementById('userSearchForm');
+    const resultsDiv = document.getElementById('searchResults');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const search = document.getElementById('userSearchInput').value;
+
+        const res = await fetch(`/admin/users?search=${encodeURIComponent(search)}`);
+        const data = await res.json();
+
+        if (data.users.length === 0) {
+            resultsDiv.innerHTML = '<p>No users found.</p>';
+            return;
+        }
+
+        resultsDiv.innerHTML = data.users.map(user => `
+        <div class="user-result">
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Signup:</strong> ${new Date(user.created_at).toLocaleString()}</p>
+          <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
+          <p><strong>Roles:</strong> ${user.user_role_assignments.map(r => r.user_roles.role_name).join(', ')}</p>
+          <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
+        </div>
+      `).join('');
+    });
+</script>

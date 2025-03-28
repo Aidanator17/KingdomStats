@@ -43,15 +43,20 @@ function initialize(passport) {
       const user = await prisma.users.findUnique({
         where: { user_id: id },
         include: {
-          user_favourites: true, // this includes related favourites
+          user_favourites: true,
+          user_role_assignments: {
+            include: {
+              user_roles: true
+            }
+          }
         },
       });
-
+  
       done(null, user);
     } catch (err) {
       done(err);
     }
-  });
+  });  
 
 }
 
