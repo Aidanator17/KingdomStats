@@ -56,13 +56,13 @@
             <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
   
             <div class="custom-role-select">
-              <label for="role-select-${user.id}"><strong>Role:</strong></label>
-              <select id="role-select-${user.id}" class="glass-select" data-current-role="${role}">
+              <label for="role-select-${user.user_id}"><strong>Role:</strong></label>
+              <select id="role-select-${user.user_id}" class="glass-select" data-current-role="${role}">
                 <option value="basic" ${role === 'basic' ? 'selected' : ''}>Basic</option>
                 <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
               </select>
             </div>
-  <button id="save-role-${user.id}" class="save-role-btn" onclick="saveRole('${user.id}')" style="display: none;">Save Role</button>
+  <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
 
   
             <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
@@ -72,8 +72,8 @@
         }).join('');
         // Set up all role dropdowns
         data.users.forEach(user => {
-            const roleSelect = document.getElementById(`role-select-${user.id}`);
-            const saveBtn = document.getElementById(`save-role-${user.id}`);
+            const roleSelect = document.getElementById(`role-select-${user.user_id}`);
+            const saveBtn = document.getElementById(`save-role-${user.user_id}`);
             const currentRole = roleSelect.getAttribute('data-current-role');
 
             roleSelect.addEventListener('change', () => {
@@ -111,7 +111,6 @@
         })
             .then(res => res.json())
             .then(() => {
-                alert(`Role updated to ${selectedRole}`);
                 document.getElementById(`save-role-${userId}`).style.display = 'none';
             })
             .catch(err => {
