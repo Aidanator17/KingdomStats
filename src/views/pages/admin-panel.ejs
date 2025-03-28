@@ -88,11 +88,10 @@
   <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
 `}
 
-  <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
 
-  <p><strong>Email Verified:</strong> ${user.email_verified ? '✅' : '❌'}</p>
+  <p><strong>Email Verified:</strong> ${user.verified ? '✅' : '❌'}</p>
 
-${!user.email_verified ? `
+${!user.verified ? `
   <form action="/admin/users/${user.user_id}/resend-verification" method="POST" class="resend-form">
     <button type="submit" class="resend-btn">Resend Verification Email</button>
   </form>
