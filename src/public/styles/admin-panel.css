@@ -212,4 +212,14 @@ html {
   .save-role-btn:hover {
     background: rgba(0, 255, 100, 0.2);
   }
+  .owner-label {
+    color: gold;
+    font-weight: bold;
+    font-size: 14px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-left: 8px;
+  }
   

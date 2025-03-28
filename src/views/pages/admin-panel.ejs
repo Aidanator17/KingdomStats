@@ -55,13 +55,22 @@
             <p><strong>Signup:</strong> ${new Date(user.created_at).toLocaleString()}</p>
             <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
   
-            <div class="custom-role-select">
-              <label for="role-select-${user.user_id}"><strong>Role:</strong></label>
-              <select id="role-select-${user.user_id}" class="glass-select" data-current-role="${role}">
-                <option value="basic" ${role === 'basic' ? 'selected' : ''}>Basic</option>
-                <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
-              </select>
-            </div>
+            ${role === 'owner' ? `
+  <div class="custom-role-select">
+    <label><strong>Role:</strong></label>
+    <span class="owner-label">Owner</span>
+  </div>
+` : `
+  <div class="custom-role-select">
+    <label for="role-select-${user.user_id}"><strong>Role:</strong></label>
+    <select id="role-select-${user.user_id}" class="glass-select" data-current-role="${role}">
+      <option value="basic" ${role === 'basic' ? 'selected' : ''}>Basic</option>
+      <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+    </select>
+  </div>
+  <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
+`}
+
   <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
 
   
