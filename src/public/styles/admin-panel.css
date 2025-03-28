@@ -222,4 +222,52 @@ html {
     border-radius: 8px;
     margin-left: 8px;
   }
+  .resend-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: rgba(255, 200, 0, 0.1);
+    border: 1px solid rgba(255, 200, 0, 0.3);
+    color: gold;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
   
+  .resend-btn:hover {
+    background: rgba(255, 200, 0, 0.2);
+  }
+  
+  /* Email Utility Styling */
+  .email-utility-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .email-utility-form input,
+  .email-utility-form textarea {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+    resize: vertical;
+  }
+  
+  .email-utility-form button {
+    padding: 10px 20px;
+    background: rgba(0, 120, 255, 0.2);
+    border: 1px solid rgba(0, 120, 255, 0.3);
+    color: #77baff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .email-utility-form button:hover {
+    background: rgba(0, 120, 255, 0.3);
+  }
+    

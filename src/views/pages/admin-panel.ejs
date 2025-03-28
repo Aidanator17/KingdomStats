@@ -3,6 +3,7 @@
     <div class="admin-mobile-nav">
         <a href="#user-lookup">User Lookup</a>
         <a href="#logs">Logs</a>
+        <li><a href="#email-utility">Email Utility</a></li>
     </div>
 
     <!-- Floating Right Panel -->
@@ -11,6 +12,7 @@
         <ul class="admin-nav">
             <li><a href="#user-lookup">User Lookup</a></li>
             <li><a href="#logs">Logs</a></li>
+            <li><a href="#email-utility">Email Utility</a></li>
         </ul>
     </div>
 
@@ -29,8 +31,23 @@
         <h2>Logs</h2>
         <p>Coming soon...</p>
     </section>
+    <section class="glass-card" id="email-utility">
+        <h2>Email Utility</h2>
+        <form action="/admin/email/send" method="POST" class="email-utility-form">
+          <label for="to">Target Email</label>
+          <input type="email" name="to" id="to" required />
+      
+          <label for="subject">Subject</label>
+          <input type="text" name="subject" id="subject" required />
+      
+          <label for="body">Body</label>
+          <textarea name="body" id="body" rows="5" required></textarea>
+      
+          <button type="submit">Send Email</button>
+        </form>
+      </section>
 </div>
-
+  
 <script>
     const form = document.getElementById('userSearchForm');
     const resultsDiv = document.getElementById('searchResults');
@@ -73,7 +90,14 @@
 
   <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
 
-  
+  <p><strong>Email Verified:</strong> ${user.email_verified ? '✅' : '❌'}</p>
+
+${!user.email_verified ? `
+  <form action="/admin/users/${user.user_id}/resend-verification" method="POST" class="resend-form">
+    <button type="submit" class="resend-btn">Resend Verification Email</button>
+  </form>
+` : ''}
+
             <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
   
           </div>
