@@ -7,7 +7,7 @@ const { sendVerificationEmail } = require('../utils/mailer');
 // Render the home page
 router.get('/', async (req, res) => {
   if (typeof req.user !== 'undefined') {
-    console.log(req.user.user_role_assignments);
+    // console.log(req.user);
   }
   const favourites = (req.user && req.user.user_favourites) ? req.user.user_favourites : [{ nickname: "Aidanator#JAX", target_puuid: "27f3cba4-d42c-563d-9b12-92dc4ac54127" }]; // replace with empty array in live app
   res.render('pages/landing', {

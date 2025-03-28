@@ -27,6 +27,7 @@ app.use(passport.session());
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
   res.locals.favourites = req.user?.favourites || [];
+  res.locals.role = req.user?.user_role_assignments[0].user_roles?.role_name || null;
   next();
 });
 
