@@ -30,8 +30,6 @@
           <form action="/auth/logout" method="POST" class="logout-form">
             <button type="submit">Logout</button>
           </form>
-          
-          
         </div>
       </div>
     <% } else { %>
@@ -50,6 +48,9 @@
   <a href="/maps">Map Stats</a>
   <% if (user) { %>
     <a href="/account">Account</a>
+    <% if (role === 'admin' || role === 'owner') { %>
+      <a href="/admin">Admin Panel</a>
+    <% } %>
     <form action="/auth/logout" method="POST" class="logout-form">
       <button type="submit">Logout</button>
     </form>
