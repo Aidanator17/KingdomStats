@@ -1,0 +1,138 @@
+<div class="user-profile-page">
+  <!-- Player Header -->
+  <section class="glass-card player-info">
+    <div class="player-header">
+  
+      <!-- Left: Player Card + Name -->
+      <div class="player-main-info">
+        <img src="<%= player.card %>" alt="Player Card" class="player-card" />
+        <div class="player-meta">
+          <h1><%= player.name %><span class="tagline">#<%= player.tag %></span></h1>
+        </div>
+      </div>
+  
+      <!-- Right: Ranks -->
+      <div class="rank-display">
+        <div class="rank-row">
+          <span class="rank-label">Current:</span>
+          <img src="<%= player.rankIcon %>" alt="Current Rank Icon" class="rank-icon" />
+        </div>
+        <div class="rank-row">
+          <span class="rank-label">Peak:</span>
+          <img src="<%= player.peakRankIcon %>" alt="Peak Rank Icon" class="rank-icon" />
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+
+  <!-- Core Stats Tabs -->
+  <section class="glass-card stats-summary">
+    <div class="stats-tabs">
+      <button class="tab active" data-tab="overall">Overall</button>
+      <button class="tab" data-tab="season">Season</button>
+      <button class="tab" data-tab="recent">Recent</button>
+    </div>
+    <div class="stats-content" id="statsContent">
+      <% const panels = ['overall', 'season', 'recent']; %>
+      <% panels.forEach((panel, i) => { %>
+        <div class="stats-panel <%= i === 0 ? 'active' : '' %>" id="panel-<%= panel %>">
+          <div class="stat-card">K/D: <span><%= player.stats[panel].kd %></span></div>
+          <div class="stat-card">KDA: <span><%= player.stats[panel].kda %></span></div>
+          <div class="stat-card">HS%: <span><%= player.stats[panel].hs %>%</span></div>
+          <div class="stat-card">Win%: <span><%= player.stats[panel].win %>%</span></div>
+          <div class="stat-card">Time Played: <span><%= player.stats[panel].timePlayed %></span></div>
+          <div class="stat-card">Top Agent: <span><%= player.stats[panel].topAgent %></span></div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <!-- Layout: Match History + Sidebar -->
+  <div class="profile-columns">
+    <div class="profile-main">
+      <!-- Match History -->
+      <section class="glass-card match-history">
+        <h2>Recent Matches</h2>
+
+        <!-- Header Row -->
+        <div class="match-row match-header-row">
+          <div class="match-col date-col">Date</div>
+          <div class="match-col map-col">Map</div>
+          <div class="match-col score-col">Score</div>
+          <div class="match-col agent-col">Agent</div>
+          <div class="match-col acs-col">ACS</div>
+          <div class="match-col kd-col">K/D</div>
+          <div class="match-col kda-col">KDA</div>
+          <div class="match-col hs-col">HS%</div>
+          <div class="match-col link-col"><!-- No title --></div>
+        </div>
+
+        <div class="match-list">
+          <% matches.forEach(match => { %>
+            <div class="match-row <%= match.win ? 'match-win' : 'match-loss' %>">
+              <div class="match-col date-col">
+                <span class="match-date"><%= match.dateOnly %></span>
+                <span class="match-time"><%= match.timeOnly %></span>
+              </div>
+              
+              <div class="match-col map-col">
+                <div class="map-preview" style="background-image: url('<%= match.mapImage %>');"></div>
+                <span class="map-name"><%= match.map %></span>
+              </div>
+              <div class="match-col score-col score-stacked">
+                <span><%= match.teamScore %></span>
+                <span>-</span>
+                <span><%= match.enemyScore %></span>
+              </div>
+              
+              <div class="match-col agent-col">
+                <img src="<%= match.agentIcon %>" class="agent-icon" />
+              </div>
+              <div class="match-col acs-col"><%= match.acs %></div>
+              <div class="match-col kd-col"><%= match.kd %></div>
+              <div class="match-col kda-col"><%= match.kda %></div>
+              <div class="match-col hs-col"><%= match.hs %>%</div>
+              <div class="match-col link-col">
+                <a href="/match/<%= match.id %>" class="match-link">View</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    </div>
+
+    <!-- Niche Stats Sidebar (desktop) -->
+    <aside class="glass-card niche-stats desktop-only">
+      <h3>Niche Stats</h3>
+      <!-- Map winrates, agent stats, teammate combos, etc. -->
+    </aside>
+  </div>
+
+  <!-- Mobile Collapsible Niche Stats -->
+  <section class="glass-card niche-stats mobile-only">
+    <details>
+      <summary>View Niche Stats</summary>
+      <div class="niche-content">
+        <!-- Same as desktop content -->
+      </div>
+    </details>
+  </section>
+</div>
+
+<!-- Stat Tab Toggle Script -->
+<script>
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      const tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.stats-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.getElementById(`panel-${tab}`).classList.add('active');
+    });
+  });
+</script>
