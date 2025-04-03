@@ -66,6 +66,12 @@ app.use('/api/favourites', favouriteRoutes);
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/admin', adminRoutes);
 
+//test routes for development
+if (process.env.NODE_ENV === 'development') {
+  const testRoutes = require('./routes/testRoutes');
+  app.use('/test', testRoutes);
+}
+
 
 // Export app
 module.exports = app;
