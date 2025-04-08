@@ -25,8 +25,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 // Set up user object globally
 app.use((req, res, next) => {
+  const user = req.user || null;
   res.locals.user = req.user || null;
+  res.locals.email_verified = user?.verified || false;
   res.locals.favourites = req.user?.favourites || [];
+  res.locals.role = req.user?.user_role_assignments[0].user_roles?.role_name || null;
   next();
 });
 
@@ -59,6 +62,16 @@ app.use('/auth', authRoutes);
 
 const favouriteRoutes = require('./routes/favouriteRoutes');
 app.use('/api/favourites', favouriteRoutes);
+
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/admin', adminRoutes);
+
+//test routes for development
+if (process.env.NODE_ENV === 'development') {
+  const testRoutes = require('./routes/testRoutes');
+  app.use('/test', testRoutes);
+}
+
 
 // Export app
 module.exports = app;

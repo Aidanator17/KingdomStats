@@ -132,7 +132,65 @@ router.get('/verify/:token', async (req, res) => {
   }
 });
 
+// POST /auth/password
+router.post('/password', ensureAuthenticated, async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  const userId = req.user.user_id;
 
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.render('pages/account', {
+      passwordError: 'All password fields are required.',
+      user: req.user,
+      title: req.user.username,
+      pageStyles: '/styles/account.css'
+    });
+  }
+  
+  if (newPassword !== confirmPassword) {
+    return res.render('pages/account', {
+      passwordError: 'New passwords do not match.',
+      user: req.user,
+      title: req.user.username,
+      pageStyles: '/styles/account.css'
+    });
+  }
+
+  try {
+    const user = await prisma.users.findUnique({ where: { user_id: userId } });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isMatch) {
+      return res.render('pages/account', {
+        passwordError: 'Current password is incorrect.',
+        user: req.user,
+        title: req.user.username,
+        pageStyles: '/styles/account.css'
+      });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await prisma.users.update({
+      where: { user_id: userId },
+      data: { password_hash: hashed },
+    });
+
+    return res.render('pages/account', {
+      passwordSuccess: 'Password updated successfully.',
+      user: req.user,
+      title: req.user.username,
+      pageStyles: '/styles/account.css'
+    });
+  } catch (err) {
+    console.error(err);
+    return res.render('pages/account', {
+      passwordSuccess: 'Password updated successfully.',
+      user: req.user,
+      title: req.user.username,
+      pageStyles: '/styles/account.css'
+    });
+  }
+});
 
 
 module.exports = router;

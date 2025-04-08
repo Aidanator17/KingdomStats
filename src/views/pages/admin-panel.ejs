@@ -1,0 +1,153 @@
+<div class="admin-main">
+    <!-- Mobile-only Top Nav -->
+    <div class="admin-mobile-nav">
+        <a href="#user-lookup">User Lookup</a>
+        <a href="#logs">Logs</a>
+        <li><a href="#email-utility">Email Utility</a></li>
+    </div>
+
+    <!-- Floating Right Panel -->
+    <div class="admin-float-panel">
+        <h3>Admin Panel</h3>
+        <ul class="admin-nav">
+            <li><a href="#user-lookup">User Lookup</a></li>
+            <li><a href="#logs">Logs</a></li>
+            <li><a href="#email-utility">Email Utility</a></li>
+        </ul>
+    </div>
+
+    <!-- User Lookup -->
+    <section class="glass-card" id="user-lookup">
+        <h2>User Lookup</h2>
+        <form id="userSearchForm" class="admin-search-form">
+            <input type="text" name="search" id="userSearchInput" placeholder="Search by ID or Email" required />
+            <button type="submit">Search</button>
+        </form>
+        <div id="searchResults" class="admin-results"></div>
+    </section>
+
+    <!-- Logs -->
+    <section class="glass-card" id="logs">
+        <h2>Logs</h2>
+        <p>Coming soon...</p>
+    </section>
+    <section class="glass-card" id="email-utility">
+        <h2>Email Utility</h2>
+        <form action="/admin/email/send" method="POST" class="email-utility-form">
+          <label for="to">Target Email</label>
+          <input type="email" name="to" id="to" required />
+      
+          <label for="subject">Subject</label>
+          <input type="text" name="subject" id="subject" required />
+      
+          <label for="body">Body</label>
+          <textarea name="body" id="body" rows="5" required></textarea>
+      
+          <button type="submit">Send Email</button>
+        </form>
+      </section>
+</div>
+  
+<script>
+    const form = document.getElementById('userSearchForm');
+    const resultsDiv = document.getElementById('searchResults');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const search = document.getElementById('userSearchInput').value;
+
+        const res = await fetch(`/admin/users?search=${encodeURIComponent(search)}`);
+        const data = await res.json();
+
+        if (data.users.length === 0) {
+            resultsDiv.innerHTML = '<p>No users found.</p>';
+            return;
+        }
+
+        resultsDiv.innerHTML = data.users.map(user => {
+            const role = user.user_role_assignments[0].user_roles.role_name;
+            return `
+          <div class="user-result">
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Signup:</strong> ${new Date(user.created_at).toLocaleString()}</p>
+            <p><strong>Last login:</strong> ${new Date(user.last_login).toLocaleString()}</p>
+  
+            ${role === 'owner' ? `
+  <div class="custom-role-select">
+    <label><strong>Role:</strong></label>
+    <span class="owner-label">Owner</span>
+  </div>
+` : `
+  <div class="custom-role-select">
+    <label for="role-select-${user.user_id}"><strong>Role:</strong></label>
+    <select id="role-select-${user.user_id}" class="glass-select" data-current-role="${role}">
+      <option value="basic" ${role === 'basic' ? 'selected' : ''}>Basic</option>
+      <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+    </select>
+  </div>
+  <button id="save-role-${user.user_id}" class="save-role-btn" onclick="saveRole('${user.user_id}')" style="display: none;">Save Role</button>
+`}
+
+
+  <p><strong>Email Verified:</strong> ${user.verified ? '✅' : '❌'}</p>
+
+${!user.verified ? `
+  <form action="/admin/users/${user.user_id}/resend-verification" method="POST" class="resend-form">
+    <button type="submit" class="resend-btn">Resend Verification Email</button>
+  </form>
+` : ''}
+
+            <p><strong>Riot Linked:</strong> ${user.riot_accounts.length > 0 ? '✅' : '❌'}</p>
+  
+          </div>
+        `;
+        }).join('');
+        // Set up all role dropdowns
+        data.users.forEach(user => {
+            const roleSelect = document.getElementById(`role-select-${user.user_id}`);
+            const saveBtn = document.getElementById(`save-role-${user.user_id}`);
+            const currentRole = roleSelect.getAttribute('data-current-role');
+
+            roleSelect.addEventListener('change', () => {
+                if (roleSelect.value !== currentRole) {
+                    saveBtn.style.display = 'inline-block';
+                } else {
+                    saveBtn.style.display = 'none';
+                }
+            });
+        });
+
+    });
+
+    function setupRoleDropdown(userId, currentRole) {
+        const selectEl = document.getElementById(`role-select-${userId}`);
+        const saveBtn = document.getElementById(`save-role-${userId}`);
+
+        selectEl.addEventListener('change', () => {
+            if (selectEl.value !== currentRole) {
+                saveBtn.style.display = 'inline-block';
+            } else {
+                saveBtn.style.display = 'none';
+            }
+        });
+    }
+
+    function saveRole(userId) {
+        const selectEl = document.getElementById(`role-select-${userId}`);
+        const selectedRole = selectEl.value;
+
+        fetch(`/admin/users/${userId}/role`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role: selectedRole })
+        })
+            .then(res => res.json())
+            .then(() => {
+                document.getElementById(`save-role-${userId}`).style.display = 'none';
+            })
+            .catch(err => {
+                console.error('Failed to update role', err);
+                alert('Error updating role.');
+            });
+    }
+</script>
